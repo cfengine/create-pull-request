@@ -1,3 +1,8 @@
+# Why cfengine/create-pull-request?
+We forked this repo to maintain our own private copy to use with cfbs
+- black formatting github actions https://github.com/cfengine/cfbs/blob/55b7941a79143cc8fa9e8b0e6dcee66a64cfeafa/.github/workflows/black-format.yml#L57
+- build index mirroring https://github.com/cfengine/build-index/blob/68475e4bed3ccf0222ee37a27d3a03e62ad9c37e/.github/workflows/mirroring.yml#L60
+
 # <img width="24" height="24" src="docs/assets/logo.svg"> Create Pull Request
 [![CI](https://github.com/peter-evans/create-pull-request/workflows/CI/badge.svg)](https://github.com/peter-evans/create-pull-request/actions?query=workflow%3ACI)
 [![GitHub Marketplace](https://img.shields.io/badge/Marketplace-Create%20Pull%20Request-blue.svg?colorA=24292e&colorB=0366d6&style=flat&longCache=true&logo=github)](https://github.com/marketplace/actions/create-pull-request)
