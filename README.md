@@ -15,7 +15,7 @@ Create Pull Request action will:
    - tracked (modified) files
    - commits made during the workflow that have not been pushed
 2. Commit all changes to a new branch, or update an existing pull request branch.
-3. Create a pull request to merge the new branch into the base&mdash;the branch checked out in the workflow.
+3. Create or update a pull request to merge the branch into the base&mdash;the branch checked out in the workflow.
 
 ## Documentation
 
@@ -99,7 +99,7 @@ Other token options:
 #### branch-token
 
 The action first creates a branch, and then creates a pull request for the branch.
-For some rare use cases it can be useful, or even neccessary, to use different tokens for these operations.
+For some rare use cases it can be useful, or even necessary, to use different tokens for these operations.
 It is not advisable to use this input unless you know you need to.
 
 #### commit-message
@@ -245,26 +245,6 @@ Note that the repository must be checked out on a branch with a remote, it won't
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
 ```
-
-<!--
-### Create a project card
-
-To create a project card for the pull request, pass the `pull-request-number` step output to [create-or-update-project-card](https://github.com/peter-evans/create-or-update-project-card) action.
-
-```yml
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v7
-
-      - name: Create or Update Project Card
-        if: ${{ steps.cpr.outputs.pull-request-number }}
-        uses: peter-evans/create-or-update-project-card@v2
-        with:
-          project-name: My project
-          column-name: My column
-          issue-number: ${{ steps.cpr.outputs.pull-request-number }}
-```
--->
 
 ### Auto-merge
 

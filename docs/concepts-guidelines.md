@@ -231,7 +231,7 @@ It will use their own fork to push code and create the pull request.
 
 1. Create a new GitHub user and login.
 2. Fork the repository that you will be creating pull requests in.
-3. Create a Classic [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with `repo` scope.
+3. Create a Classic [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with `repo` and `workflow` scopes.
 4. Logout and log back into your main user account.
 5. Add a secret to your repository containing the above PAT.
 6. As shown in the following example workflow, set the `push-to-fork` input to the full repository name of the fork.
@@ -303,7 +303,7 @@ GitHub App generated tokens can be configured with fine-grained permissions and 
     - Uncheck `Active` under `Webhook`. You do not need to enter a `Webhook URL`.
     - Under `Repository permissions: Contents` select `Access: Read & write`.
     - Under `Repository permissions: Pull requests` select `Access: Read & write`.
-    - Under `Repository permissions: Workflows` select `Access: Read-only`.
+    - Under `Repository permissions: Workflows` select `Access: Read & write`.
       - **NOTE**: Only needed if pull requests could contain changes to Actions workflows.
     - Under `Organization permissions: Members` select `Access: Read-only`.
       - **NOTE**: Only needed if you would like add teams as reviewers to PRs.

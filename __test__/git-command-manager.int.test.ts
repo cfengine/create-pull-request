@@ -11,15 +11,16 @@ describe('git-command-manager integration tests', () => {
   })
 
   it('tests getCommit', async () => {
-    const initialCommit = await git.getCommit('HEAD^^')
-    const emptyCommit = await git.getCommit('HEAD^')
+    const initialCommit = await git.getCommit('HEAD^^^')
+    const emptyCommit = await git.getCommit('HEAD^^')
+    const modifiedCommit = await git.getCommit('HEAD^')
     const headCommit = await git.getCommit('HEAD')
 
     expect(initialCommit.subject).toEqual('initial commit')
     expect(initialCommit.signed).toBeFalsy()
-    expect(initialCommit.changes).toEqual([
-      {mode: '100644', status: 'A', path: 'README.md'}
-    ])
+    expect(initialCommit.changes[0].mode).toEqual('100644')
+    expect(initialCommit.changes[0].status).toEqual('A')
+    expect(initialCommit.changes[0].path).toEqual('README→TEMP.md') // filename contains unicode
 
     expect(emptyCommit.subject).toEqual('empty commit for tests')
     expect(emptyCommit.tree).toEqual(initialCommit.tree) // empty commits have no tree and reference the parent's
@@ -27,11 +28,21 @@ describe('git-command-manager integration tests', () => {
     expect(emptyCommit.signed).toBeFalsy()
     expect(emptyCommit.changes).toEqual([])
 
-    expect(headCommit.subject).toEqual('add sparkles')
-    expect(headCommit.parents[0]).toEqual(emptyCommit.sha)
+    expect(modifiedCommit.subject).toEqual('add sparkles')
+    expect(modifiedCommit.parents[0]).toEqual(emptyCommit.sha)
+    expect(modifiedCommit.signed).toBeFalsy()
+    expect(modifiedCommit.changes[0].mode).toEqual('100644')
+    expect(modifiedCommit.changes[0].status).toEqual('M')
+    expect(modifiedCommit.changes[0].path).toEqual('README→TEMP.md')
+
+    expect(headCommit.subject).toEqual('rename readme')
+    expect(headCommit.parents[0]).toEqual(modifiedCommit.sha)
     expect(headCommit.signed).toBeFalsy()
-    expect(headCommit.changes).toEqual([
-      {mode: '100644', status: 'M', path: 'README.md'}
-    ])
+    expect(headCommit.changes[0].mode).toEqual('100644')
+    expect(headCommit.changes[0].status).toEqual('A')
+    expect(headCommit.changes[0].path).toEqual('README.md')
+    expect(headCommit.changes[1].mode).toEqual('100644')
+    expect(headCommit.changes[1].status).toEqual('D')
+    expect(headCommit.changes[1].path).toEqual('README→TEMP.md')
   })
 })

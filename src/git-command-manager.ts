@@ -14,6 +14,7 @@ export type Commit = {
   body: string
   changes: {
     mode: string
+    dstSha: string
     status: 'A' | 'M' | 'D'
     path: string
   }[]
@@ -156,9 +157,13 @@ export class GitCommandManager {
   async getCommit(ref: string): Promise<Commit> {
     const endOfBody = '###EOB###'
     const output = await this.exec([
+      '-c',
+      'core.quotePath=false',
       'show',
       '--raw',
       '--cc',
+      '--no-renames',
+      '--no-abbrev',
       `--format=%H%n%T%n%P%n%G?%n%s%n%b%n${endOfBody}`,
       ref
     ])
@@ -176,13 +181,14 @@ export class GitCommandManager {
       body: detailLines.slice(5, endOfBodyIndex).join('\n'),
       changes: lines.slice(endOfBodyIndex + 2, -1).map(line => {
         const change = line.match(
-          /^:(\d{6}) (\d{6}) \w{7} \w{7} ([AMD])\s+(.*)$/
+          /^:(\d{6}) (\d{6}) \w{40} (\w{40}) ([AMD])\s+(.*)$/
         )
         if (change) {
           return {
-            mode: change[3] === 'D' ? change[1] : change[2],
-            status: change[3],
-            path: change[4]
+            mode: change[4] === 'D' ? change[1] : change[2],
+            dstSha: change[3],
+            status: change[4],
+            path: change[5]
           }
         } else {
           unparsedChanges.push(line)
